@@ -1,0 +1,30 @@
+{
+  "compilerOptions": {
+    "module": "ESNext",
+    "target": "ESNext",
+    "lib": ["esnext", "DOM", "DOM.Iterable"],
+
+    /* Bundler mode */
+    "esModuleInterop": true,
+    "removeComments": true,
+    "moduleResolution": "Bundler",
+    "resolveJsonModule": true,
+    "forceConsistentCasingInFileNames": true,
+    "isolatedModules": true,
+    "noEmit": true,
+
+    /* Linting */
+    "strict": true,
+    "skipLibCheck": true,
+    "noImplicitAny": true,
+    "allowImportingTsExtensions": true,
+
+    /* Absolute import */
+    "rootDir": "./src",
+    "outDir": "./dist",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  }
+}

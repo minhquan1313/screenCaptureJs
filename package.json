@@ -1,0 +1,36 @@
+{
+  "name": "mmo",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "build": "rimraf dist && node build.config.mjs",
+    "lint": "eslint src/index.ts",
+    "syntax": "tsc --noEmit",
+    "format": "prettier . --write"
+  },
+  "keywords": [],
+  "author": "MTB3050",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "esbuild": "0.21.4",
+    "eslint": "^9.4.0",
+    "eslint-plugin-react-refresh": "^0.4.7",
+    "nodemon": "^3.1.2",
+    "prettier": "^3.3.0",
+    "rimraf": "^5.0.7",
+    "tsx": "^4.11.2",
+    "typescript": "^5.4.5"
+  },
+  "nodemonConfig": {
+    "watch": [
+      "src/**"
+    ],
+    "ext": "ts,json",
+    "exec": "npm run dev:build:nodemon"
+  },
+  "dependencies": {
+    "html2canvas": "^1.4.1"
+  }
+}
