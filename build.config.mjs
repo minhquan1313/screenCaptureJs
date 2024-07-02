@@ -5,10 +5,10 @@ await esbuild.build({
   outdir: "dist",
 
   platform: "browser",
-  format: "esm",
+  format: "iife",
 
   // packages: "external",
   bundle: true,
-  minify: true,
+  // minify: true,
   legalComments: "none",
 });

@@ -4,7 +4,7 @@ import { sleep } from "@/utils/sleep";
 
 const requireCondition = true;
 
-async function main(delay = 1000, everyMinute = 20) {
+async function main(delay = 1000, everyMinute = 30) {
   let lastCaptured: Date = new Date();
   lastCaptured.setMinutes(lastCaptured.getMinutes() - 1);
 
@@ -31,7 +31,7 @@ async function main(delay = 1000, everyMinute = 20) {
     }
 
     if (allowCapture) {
-      await capture();
+      await capture("tradingViewGC1");
       lastCaptured = time;
     }
 

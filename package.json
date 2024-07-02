@@ -4,6 +4,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
+    "dev": "nodemon --config",
     "build": "rimraf dist && node build.config.mjs",
     "lint": "eslint src/index.ts",
     "syntax": "tsc --noEmit",
@@ -25,10 +26,11 @@
   },
   "nodemonConfig": {
     "watch": [
-      "src/**"
+      "src/**",
+      "build.config.mjs"
     ],
     "ext": "ts,json",
-    "exec": "npm run dev:build:nodemon"
+    "exec": "npm run build"
   },
   "dependencies": {
     "html2canvas": "^1.4.1"
