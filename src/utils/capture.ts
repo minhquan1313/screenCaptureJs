@@ -6,10 +6,13 @@ export function capture(fn = "canvas_image") {
   return new Promise<void>((rs) => {
     const [h, m, s] = getHMS(new Date());
     const [y, mo, d] = getYMD(new Date());
-    const timeStr = y + "_" + [mo, d, h, m, s].map((v) => String(v).padStart(2, "0")).join("_");
-    makeNumberOnDom(timeStr);
+    const timeStrDom = [y, mo, d].map((v) => String(v).padStart(2, "0")).join("/") + " " + [h, m, s].map((v) => String(v).padStart(2, "0")).join(":");
+    const timeStr = [y, mo, d].map((v) => String(v).padStart(2, "0")).join("_") + "-" + [h, m, s].map((v) => String(v).padStart(2, "0")).join("_");
+    makeNumberOnDom(timeStrDom);
 
-    html2canvas(document.body).then((canvas) => {
+    html2canvas(document.body, {
+      allowTaint: true,
+    }).then((canvas) => {
       const link = document.createElement("a");
       link.href = canvas.toDataURL("image/png");
 
