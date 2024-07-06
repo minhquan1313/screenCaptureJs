@@ -1,10 +1,13 @@
 import { capture } from "@/utils/capture";
+import { getDiffXauVsGc1ForDom } from "@/utils/getDiffXauVsGc1ForDom";
 import { getHMS } from "@/utils/getHMS";
+import { getTimeForDom } from "@/utils/getTimeForDom";
+import { makeContentOnDom } from "@/utils/makeContentOnDom";
 import { sleep } from "@/utils/sleep";
 
 const requireCondition = true;
 
-async function main(delay = 1000, everyMinute = 30) {
+async function main(delay = 3000, everyMinute = 30) {
   let lastCaptured: Date = new Date();
   lastCaptured.setMinutes(lastCaptured.getMinutes() - 1);
 
@@ -13,6 +16,16 @@ async function main(delay = 1000, everyMinute = 30) {
     .map((_, i) => i * everyMinute);
 
   while (true) {
+    const timeToDom = getTimeForDom();
+    const diffXauVsGc1 = getDiffXauVsGc1ForDom();
+    makeContentOnDom(
+      [timeToDom + "\n" + diffXauVsGc1 + "\n"]
+        .join("")
+        .split("\n")
+        .filter((v) => v.trim())
+        .join("\n"),
+    );
+
     let time = new Date();
     const [h, m] = getHMS(time);
 

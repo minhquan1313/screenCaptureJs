@@ -33,6 +33,8 @@
     "exec": "npm run build"
   },
   "dependencies": {
-    "html2canvas": "^1.4.1"
+    "html2canvas": "^1.4.1",
+    "vanie": "^0.0.4",
+    "windrag": "^2.0.1"
   }
 }
