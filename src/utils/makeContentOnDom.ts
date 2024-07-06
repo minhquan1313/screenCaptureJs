@@ -1,3 +1,4 @@
+import { cssApply } from "@/utils/cssApply";
 import windrag from "windrag";
 
 let count = Number(localStorage.getItem("mtb_counter")) || 0;
@@ -7,20 +8,35 @@ const idDom = "#" + id;
 
 export function makeContentOnDom(str: string, withCount = true) {
   const boxDiv = getBoxDiv();
-
-  const contentDiv = document.createElement("div");
   boxDiv.innerHTML = "";
-  boxDiv.append(contentDiv);
 
-  contentDiv.style.cssText = `
-    background: rgba(0, 0, 0, 0.7);
-    padding: 0.6rem 1.5rem;
-    font-size: 1.2rem;
-    text-align: right;
-    border-radius: 1rem;
-    border: 1px solid white;
-    font-family: consolas;
-    `;
+  const contentDiv = makeContentDiv(str, withCount);
+
+  boxDiv.append(contentDiv);
+}
+
+export const contentDivCssV1: Partial<CSSStyleDeclaration> = {
+  background: "rgba(0, 0, 0, 0.7)",
+  padding: "0.6rem 1.5rem",
+  fontSize: "1.2rem",
+  textAlign: "right",
+  borderRadius: "1rem",
+  border: "1px solid white",
+  fontFamily: "consolas",
+};
+export const contentDivCssV2: Partial<CSSStyleDeclaration> = {
+  background: "rgba(0, 0, 0, 0.7)",
+  padding: "0.6rem 1.5rem",
+  fontSize: "1.2rem",
+  textAlign: "right",
+  borderRadius: "1rem",
+  border: "1px solid white",
+  fontFamily: "consolas",
+};
+export function makeContentDiv(str: string, withCount = true) {
+  const contentDiv = document.createElement("div");
+
+  cssApply(contentDiv, contentDivCssV2);
 
   const _str = str
     .split("\n")
@@ -29,11 +45,13 @@ export function makeContentOnDom(str: string, withCount = true) {
 
   if (!withCount) {
     contentDiv.innerText = _str;
-    return;
+    return contentDiv;
   }
   contentDiv.innerText = _str + "\n#" + count++;
   if (count === 99) count = 0;
   localStorage.setItem("mtb_counter", String(count));
+
+  return contentDiv;
 }
 
 function getBoxDiv() {

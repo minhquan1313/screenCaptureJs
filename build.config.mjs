@@ -7,8 +7,12 @@ await esbuild.build({
   platform: "browser",
   format: "iife",
 
+  loader: {
+    ".svg": "text",
+  },
+
   // packages: "external",
   bundle: true,
-  // minify: true,
+  minify: true,
   legalComments: "none",
 });

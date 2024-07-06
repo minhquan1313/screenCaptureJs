@@ -30,6 +30,10 @@
       "build.config.mjs"
     ],
     "ext": "ts,json",
+    "ignore": [
+      "*.d.ts",
+      "**/types/**"
+    ],
     "exec": "npm run build"
   },
   "dependencies": {

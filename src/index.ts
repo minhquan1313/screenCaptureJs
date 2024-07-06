@@ -2,7 +2,7 @@ import { capture } from "@/utils/capture";
 import { getDiffXauVsGc1ForDom } from "@/utils/getDiffXauVsGc1ForDom";
 import { getHMS } from "@/utils/getHMS";
 import { getTimeForDom } from "@/utils/getTimeForDom";
-import { makeContentOnDom } from "@/utils/makeContentOnDom";
+import { makeContentOnDomV2 } from "@/utils/makeContentOnDomV2";
 import { sleep } from "@/utils/sleep";
 
 const requireCondition = true;
@@ -16,7 +16,7 @@ async function main(delay = 3000, everyMinute = 30) {
     .map((_, i) => i * everyMinute);
 
   const timeToDom = getTimeForDom();
-  makeContentOnDom(timeToDom + "\n", false);
+  makeContentOnDomV2(timeToDom + "\n", false);
 
   while (true) {
     let time = new Date();
@@ -39,7 +39,7 @@ async function main(delay = 3000, everyMinute = 30) {
     if (allowCapture) {
       const timeToDom = getTimeForDom();
       const diffXauVsGc1 = getDiffXauVsGc1ForDom();
-      makeContentOnDom(timeToDom + "\n" + diffXauVsGc1 + "\n");
+      makeContentOnDomV2(timeToDom + "\n" + diffXauVsGc1 + "\n", allowCapture);
 
       await capture("tradingViewGC1");
       lastCaptured = time;

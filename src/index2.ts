@@ -1,5 +1,3 @@
-async function main() {
-  // await capture();
-}
+async function main() {}
 
 main();

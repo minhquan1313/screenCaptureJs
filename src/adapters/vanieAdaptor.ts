@@ -17,3 +17,7 @@ export const vanie = (type: TVanieWindowTypeAdapter) => {
 
   return new Vanie(_type);
 };
+
+export class VanieAdaptor {
+  constructor() {}
+}
