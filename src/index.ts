@@ -15,17 +15,10 @@ async function main(delay = 3000, everyMinute = 30) {
     .fill(0)
     .map((_, i) => i * everyMinute);
 
-  while (true) {
-    const timeToDom = getTimeForDom();
-    const diffXauVsGc1 = getDiffXauVsGc1ForDom();
-    makeContentOnDom(
-      [timeToDom + "\n" + diffXauVsGc1 + "\n"]
-        .join("")
-        .split("\n")
-        .filter((v) => v.trim())
-        .join("\n"),
-    );
+  const timeToDom = getTimeForDom();
+  makeContentOnDom(timeToDom + "\n", false);
 
+  while (true) {
     let time = new Date();
     const [h, m] = getHMS(time);
 
@@ -44,6 +37,10 @@ async function main(delay = 3000, everyMinute = 30) {
     }
 
     if (allowCapture) {
+      const timeToDom = getTimeForDom();
+      const diffXauVsGc1 = getDiffXauVsGc1ForDom();
+      makeContentOnDom(timeToDom + "\n" + diffXauVsGc1 + "\n");
+
       await capture("tradingViewGC1");
       lastCaptured = time;
     }
