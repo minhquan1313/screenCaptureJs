@@ -11,7 +11,8 @@ export function getDiffXauVsGc1ForDom() {
 
   if (!xau || !gc1) return s;
 
-  const [nXau, nGc1] = [xau, gc1].map((v) => Number(v.innerText.trim()));
+  const [nXau, nGc1] = [xau, gc1].map((v) => Number(v.innerText.replaceAll(",", "").trim()));
+
   if ([nXau, nGc1].find((v) => Number.isNaN(v))) return s;
 
   s = "GC1 - XAU = " + String((nGc1 - nXau).toFixed(2));

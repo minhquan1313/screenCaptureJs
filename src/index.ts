@@ -4,6 +4,7 @@ import { getHMS } from "@/utils/getHMS";
 import { getTimeForDom } from "@/utils/getTimeForDom";
 import { makeContentOnDomV2 } from "@/utils/makeContentOnDomV2";
 import { sleep } from "@/utils/sleep";
+import { tradingViewCheckTime } from "@/utils/tradingViewCheckTime";
 
 const requireCondition = true;
 
@@ -19,7 +20,7 @@ async function main(delay = 3000, everyMinute = 30) {
   makeContentOnDomV2(timeToDom + "\n", false);
 
   while (true) {
-    let time = new Date();
+    const time = new Date();
     const [h, m] = getHMS(time);
 
     const [hLast, mLast] = getHMS(lastCaptured);
@@ -27,7 +28,7 @@ async function main(delay = 3000, everyMinute = 30) {
     let allowCapture = true;
 
     if (requireCondition) {
-      if (minuteMap.includes(m) && mLast !== m) {
+      if (minuteMap.includes(m) && mLast !== m && tradingViewCheckTime(time)) {
         console.log("NOW I capture screen", new Date().toLocaleString());
         allowCapture = true;
       } else {
