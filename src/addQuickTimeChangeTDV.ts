@@ -12,7 +12,7 @@ async function addQuickTimeChangeTDV() {
       continue;
     }
 
-    const [utc1Btn, utc7Btn] = [
+    const eleList = [
       {
         value: "(UTC+1) London",
         label: "T+1",
@@ -64,12 +64,10 @@ async function addQuickTimeChangeTDV() {
         alignItems: "center",
       });
 
-      return d;
+      return createCopyTradingViewRightToolBar(d, value);
     });
 
-    const eleList = [utc1Btn, utc7Btn].map((e) => createCopyTradingViewRightToolBar(e, e.innerText)!);
-
-    eleList.forEach((ele) => tradingViewToolBtn.parentElement?.insertBefore(ele, tradingViewToolBtn));
+    eleList.forEach((ele) => ele && tradingViewToolBtn.parentElement?.insertBefore(ele, tradingViewToolBtn));
 
     return;
   }
