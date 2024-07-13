@@ -4,6 +4,17 @@ import { getTradingViewRightToolBarBtn } from "@/utils/getTradingViewRightToolBa
 import { getXPath } from "@/utils/getXPath";
 import { sleep } from "@/utils/sleep";
 
+const elementMap = [
+  {
+    value: "(UTC+1) London",
+    label: "T+1",
+  },
+  {
+    value: "(UTC+7) Ho Chi Minh",
+    label: "T+7",
+  },
+];
+
 async function addQuickTimeChangeTDV() {
   while (true) {
     const tradingViewToolBtn = getTradingViewRightToolBarBtn();
@@ -12,16 +23,7 @@ async function addQuickTimeChangeTDV() {
       continue;
     }
 
-    const eleList = [
-      {
-        value: "(UTC+1) London",
-        label: "T+1",
-      },
-      {
-        value: "(UTC+7) Ho Chi Minh",
-        label: "T+7",
-      },
-    ].map(({ value, label }) => {
+    const eleList = elementMap.map(({ value, label }) => {
       const d = document.createElement("div");
 
       const xPath = '//tr//span[contains(text(),"' + value + '")]';
