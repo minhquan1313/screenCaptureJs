@@ -3,6 +3,8 @@ import { getHMS, getYMD } from "@/utils/getHMS";
 export function tradingViewCheckTime(nowTime: Date) {
   const tdvTime = getTdvTime();
 
+  console.log(`~🤖 tradingViewCheckTime 🤖~ `, { tdvTime: tdvTime?.toLocaleTimeString(), nowTime: nowTime.toLocaleTimeString() });
+
   if (!tdvTime) return false;
   const [nH, nM] = getHMS(nowTime);
   const [tH, tM] = getHMS(tdvTime);
@@ -11,7 +13,7 @@ export function tradingViewCheckTime(nowTime: Date) {
 }
 
 function getTdvTime() {
-  const ele = document.querySelector<HTMLButtonElement>('*[data-name="time-zone-menu"]');
+  const ele = document.querySelector<HTMLButtonElement>('button[data-name="time-zone-menu"]');
   if (!ele) return;
 
   const regex = /[()]|UTC/g;

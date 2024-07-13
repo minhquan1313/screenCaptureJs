@@ -1,6 +1,7 @@
 import svg from "@/assets/svg/dev.svg";
+import { createCopyTradingViewRightToolBar } from "@/utils/createCopyTradingViewRightToolBar";
 import { cssApply } from "@/utils/cssApply";
-import { getXPath } from "@/utils/getXPath";
+import { getTradingViewRightToolBarBtn } from "@/utils/getTradingViewRightToolBarBtn";
 import { textToDom } from "@/utils/textToDom";
 import Vanie from "vanie";
 
@@ -116,50 +117,36 @@ function appendToToolBar(vani: Vanie) {
   // const btnInToolbar = getXPath('//div[@data-name="right-toolbar"]/*[last()]');
   return new Promise<void>((rs) => {
     let itv = setInterval(() => {
-      const xpath = '//div[@data-name="right-toolbar"]/*[contains(@class,"filler")]/following-sibling::button[1]';
-      const btnInToolbar = getXPath(xpath);
+      const btnInToolbar = getTradingViewRightToolBarBtn();
 
       if (!btnInToolbar) return;
       const svgEle = textToDom(svg);
-      cssApply(svgEle, {
-        width: "36px",
-        height: "36px",
-      });
+      // cssApply(svgEle, {
+      //   width: "36px",
+      //   height: "36px",
+      // });
 
-      const btnCopy = textToDom(btnInToolbar.outerHTML);
-      btnCopy.setAttribute("aria-label", appName);
-      btnCopy.setAttribute("data-name", appName);
-      btnCopy.setAttribute("data-tooltip", appName);
-      const spanSvgWrapper = btnCopy.querySelector("span");
-      if (spanSvgWrapper) {
-        spanSvgWrapper.innerHTML = "";
-        spanSvgWrapper.append(svgEle);
-      }
+      // const btnCopy = textToDom(btnInToolbar.outerHTML);
+      // btnCopy.setAttribute("aria-label", appName);
+      // btnCopy.setAttribute("data-name", appName);
+      // btnCopy.setAttribute("data-tooltip", appName);
+      // const spanSvgWrapper = btnCopy.querySelector("span");
+      // if (spanSvgWrapper) {
+      //   spanSvgWrapper.innerHTML = "";
+      //   spanSvgWrapper.append(svgEle);
+      // }
 
-      //   const elementStr = `<button
-      // aria-label="${appName}"
-      // type="button"
-      // class="button-I_wb5FjE apply-common-tooltip common-tooltip-vertical accessible-I_wb5FjE"
-      // data-name="${appName}"
-      // aria-pressed="false"
-      // data-tooltip="${appName}"
-      // tabindex="-1">
-      // <div class="hoverMask-I_wb5FjE"></div>
-      // <span
-      //   role="img"
-      //   aria-hidden="true">
-      //   ${svgEle.outerHTML}
-      // </span>
-      // </button>`;
-      // const element = textToDom(elementStr);
-      const element = btnCopy;
+      // const element = btnCopy;
+      const element = createCopyTradingViewRightToolBar(svgEle, appName);
+      if (!element) return;
+
       btnInToolbar.parentElement?.insertBefore(element, btnInToolbar);
 
-      function resizeHandler() {
+      const resizeHandler = () => {
         const { x, y } = element.getBoundingClientRect();
         vani.pRetorno = { x, y };
-      }
-      function clickHandler() {
+      };
+      const clickHandler = () => {
         resizeHandler();
 
         // if (vani.estaMinimizado) {
@@ -168,7 +155,7 @@ function appendToToolBar(vani: Vanie) {
         // }
 
         vani.minimizar();
-      }
+      };
 
       resizeHandler();
 
