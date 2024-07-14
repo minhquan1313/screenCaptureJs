@@ -9,7 +9,7 @@ export function createCopyTradingViewRightToolBar(
     height: "36px",
   },
 ) {
-  const xpath = '//div[@data-name="right-toolbar"]/*[contains(@class,"filler")]/following-sibling::button[1]';
+  const xpath = '//div[@data-name="right-toolbar"]/button[@aria-pressed="false"][1]';
   const btnInToolbar = getXPath(xpath);
 
   if (!btnInToolbar) return;
@@ -17,18 +17,16 @@ export function createCopyTradingViewRightToolBar(
   const temp = document.createElement("div");
   temp.innerHTML = btnInToolbar.outerHTML;
 
-  const btnCopy = temp.firstElementChild!;
+  const btnCopy = temp.firstElementChild as HTMLElement;
   btnCopy.setAttribute("aria-label", name);
   btnCopy.setAttribute("data-name", name);
   btnCopy.setAttribute("data-tooltip", name);
   const spanSvgWrapper = btnCopy.querySelector("span");
-  if (spanSvgWrapper) {
-    spanSvgWrapper.innerHTML = "";
-    cssApply(icon, size);
-    spanSvgWrapper.append(icon);
+  if (!spanSvgWrapper) return;
 
-    return btnCopy;
-  }
+  spanSvgWrapper.innerHTML = "";
+  cssApply(icon, size);
+  spanSvgWrapper.append(icon);
 
-  return;
+  return btnCopy;
 }

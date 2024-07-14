@@ -1,7 +1,10 @@
-export function cssApply(ele: HTMLElement, css: Partial<CSSStyleDeclaration>) {
+export function cssApply<T extends HTMLElement>(ele: T, css: Partial<CSSStyleDeclaration>) {
   for (const key in css) {
-    if (!css[key]) continue;
+    const value = css[key];
+    if (!key || !value) continue;
 
-    ele.style[key] = css[key];
+    ele.style[key] = value;
   }
+
+  return ele;
 }

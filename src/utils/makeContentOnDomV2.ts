@@ -1,8 +1,6 @@
+import { appendVanieToToolBar } from "@/addon/appendVanieToToolBar";
 import svg from "@/assets/svg/dev.svg";
-import { createCopyTradingViewRightToolBar } from "@/utils/createCopyTradingViewRightToolBar";
 import { cssApply } from "@/utils/cssApply";
-import { getTradingViewRightToolBarBtn } from "@/utils/getTradingViewRightToolBarBtn";
-import { textToDom } from "@/utils/textToDom";
 import Vanie from "vanie";
 
 const appName = "MTB HL Plan";
@@ -67,23 +65,14 @@ function initVanieWindow() {
   const vani = new Vanie("mac-claro");
   vani.asignarPadre(document.body);
 
-  const headerEle = document.createElement("span");
-
-  cssApply(headerEle, {
+  const headerEle = cssApply(document.createElement("span"), {
     padding: "0px 0.4rem",
     pointerEvents: "none",
   });
 
   headerEle.innerText = appName;
 
-  // const svgEle = textToDom(svg);
-  // console.log("🚀 ~ initVanieWindow ~ svg:", svg);
-
-  // console.log("🚀 ~ initVanieWindow ~ svgEle:", svgEle);
-
-  // svgEle.style.height = "100%";
-  const icon = document.createElement("div");
-  cssApply(icon, {
+  const icon = cssApply(document.createElement("div"), {
     aspectRatio: "1 / 1",
     height: "100%",
     margin: "0px 0.4rem",
@@ -92,6 +81,7 @@ function initVanieWindow() {
     alignItems: "center",
     pointerEvents: "none",
   });
+
   icon.innerHTML = svg;
 
   vani.ico = icon;
@@ -108,66 +98,7 @@ function initVanieWindow() {
 
   (window as any)["vani"] = vani;
 
-  appendToToolBar(vani);
+  appendVanieToToolBar(vani, appName);
 
   return vani;
-}
-function appendToToolBar(vani: Vanie) {
-  // insertBefore
-  // const btnInToolbar = getXPath('//div[@data-name="right-toolbar"]/*[last()]');
-  return new Promise<void>((rs) => {
-    let itv = setInterval(() => {
-      const btnInToolbar = getTradingViewRightToolBarBtn();
-
-      if (!btnInToolbar) return;
-      const svgEle = textToDom(svg);
-      // cssApply(svgEle, {
-      //   width: "36px",
-      //   height: "36px",
-      // });
-
-      // const btnCopy = textToDom(btnInToolbar.outerHTML);
-      // btnCopy.setAttribute("aria-label", appName);
-      // btnCopy.setAttribute("data-name", appName);
-      // btnCopy.setAttribute("data-tooltip", appName);
-      // const spanSvgWrapper = btnCopy.querySelector("span");
-      // if (spanSvgWrapper) {
-      //   spanSvgWrapper.innerHTML = "";
-      //   spanSvgWrapper.append(svgEle);
-      // }
-
-      // const element = btnCopy;
-      const element = createCopyTradingViewRightToolBar(svgEle, appName);
-      if (!element) return;
-
-      btnInToolbar.parentElement?.insertBefore(element, btnInToolbar);
-
-      const resizeHandler = () => {
-        const { x, y } = element.getBoundingClientRect();
-        vani.pRetorno = { x, y };
-      };
-      const clickHandler = () => {
-        resizeHandler();
-
-        // if (vani.estaMinimizado) {
-        //   // const { x, y } = element.getBoundingClientRect();
-        //   // vani.posicion = { x, y };
-        // }
-
-        vani.minimizar();
-      };
-
-      resizeHandler();
-
-      vani.addEventListener("cerrar", () => {
-        element.remove();
-      });
-
-      element.addEventListener("click", clickHandler);
-      window.addEventListener("resize", resizeHandler);
-
-      clearInterval(itv);
-      rs();
-    }, 300);
-  });
 }

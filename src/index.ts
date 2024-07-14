@@ -1,10 +1,10 @@
 import { capture } from "@/utils/capture";
-import { getDiffXauVsGc1ForDom } from "@/utils/getDiffXauVsGc1ForDom";
 import { getHMS } from "@/utils/getHMS";
 import { getTimeForDom } from "@/utils/getTimeForDom";
 import { makeContentOnDomV2 } from "@/utils/makeContentOnDomV2";
 import { sleep } from "@/utils/sleep";
-import { tradingViewCheckTime } from "@/utils/tradingViewCheckTime";
+import { getDiffXauVsGc1ForDom } from "@/utils/tradingView/getDiffXauVsGc1ForDom";
+import { tradingViewCheckTime } from "@/utils/tradingView/tradingViewCheckTime";
 
 const requireCondition = true;
 
