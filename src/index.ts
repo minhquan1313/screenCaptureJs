@@ -29,10 +29,10 @@ async function main(delay = 3000, everyMinute = 30) {
       let allowCapture = true;
 
       if (requireCondition) {
-        console.log("🚀 ~ main ~ minuteMap.includes(m):", minuteMap.includes(m));
-        console.log("🚀 ~ main ~ tradingViewCheckTime(time):", tradingViewCheckTime(time));
-        console.log("🚀 ~ main ~ mLast !== m:", mLast !== m);
-        console.log("======================================================================");
+        // console.log("🚀 ~ main ~ minuteMap.includes(m):", minuteMap.includes(m));
+        // console.log("🚀 ~ main ~ tradingViewCheckTime(time):", tradingViewCheckTime(time));
+        // console.log("🚀 ~ main ~ mLast !== m:", mLast !== m);
+        // console.log("======================================================================");
 
         if (minuteMap.includes(m) && mLast !== m && tradingViewCheckTime(time)) {
           console.log("NOW I capture screen", new Date().toLocaleString());

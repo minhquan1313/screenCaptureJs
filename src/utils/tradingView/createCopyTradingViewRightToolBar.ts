@@ -1,14 +1,12 @@
 import { cssApply } from "@/utils/cssApply";
 import { getXPath } from "@/utils/getXPath";
 
-export function createCopyTradingViewRightToolBar(
-  icon: HTMLElement,
-  name: string,
-  size = {
-    width: "36px",
-    height: "36px",
-  },
-) {
+export const defaultIconSize = {
+  width: "36px",
+  height: "36px",
+};
+
+export function createCopyTradingViewRightToolBar(icon: HTMLElement, name: string, size = defaultIconSize) {
   const xpath = '//div[@data-name="right-toolbar"]/button[@aria-pressed="false"][1]';
   const btnInToolbar = getXPath(xpath);
 

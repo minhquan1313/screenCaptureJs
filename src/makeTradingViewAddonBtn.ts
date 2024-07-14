@@ -1,3 +1,4 @@
+import { addPlayReplayTDV } from "@/addon/addPlayReplayTDV";
 import { addQuickTimeChangeTDV } from "@/addon/addQuickTimeChangeTDV";
 
 async function makeTradingViewAddonBtn() {
@@ -12,6 +13,7 @@ async function makeTradingViewAddonBtn() {
   //   btnToRemoveList.forEach((e) => e.remove());
 
   await addQuickTimeChangeTDV();
+  await addPlayReplayTDV();
 }
 
 makeTradingViewAddonBtn();

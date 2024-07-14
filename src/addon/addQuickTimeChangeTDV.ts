@@ -40,14 +40,12 @@ export async function addQuickTimeChangeTDV() {
 
     const regex = /\(UTC[+-]\d+\)/;
     const currentTimeZoneSelected = getXPath('//*[@data-name="time-zone-menu"]')?.textContent?.match(regex)?.[0];
-    console.log(`~🤖 addQuickTimeChangeTDV 🤖~ `, { currentTimeZoneSelected });
 
     if (!currentTimeZoneSelected) continue;
 
     eleList.forEach(({ ele, value }) => {
       if (!ele) return;
 
-      console.log({ include: value.includes(currentTimeZoneSelected), value });
       if (value.includes(currentTimeZoneSelected)) {
         tradingViewBtnHightLight(ele, true);
       }
