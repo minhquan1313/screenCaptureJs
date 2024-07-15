@@ -1,32 +1,37 @@
+import { panelOptions } from "@/constants/panelOptions";
 import { capture } from "@/utils/capture";
 import { getHMS } from "@/utils/getHMS";
 import { getTimeForDom } from "@/utils/getTimeForDom";
 import { makeContentOnDomV2 } from "@/utils/makeContentOnDomV2";
 import { sleep } from "@/utils/sleep";
 import { getDiffXauVsGc1ForDom } from "@/utils/tradingView/getDiffXauVsGc1ForDom";
+import { makePanelOptionUI } from "@/utils/tradingView/makePanelOptionUI";
 import { tradingViewCheckTime } from "@/utils/tradingView/tradingViewCheckTime";
 
 const requireCondition = true;
 
-async function main(delay = 3000, everyMinute = 30) {
+async function main() {
   try {
     let lastCaptured: Date = new Date();
     lastCaptured.setMinutes(lastCaptured.getMinutes() - 1);
 
-    const minuteMap = Array(Math.ceil(60 / everyMinute))
-      .fill(0)
-      .map((_, i) => i * everyMinute);
-
     const timeToDom = getTimeForDom();
-    makeContentOnDomV2(timeToDom + "\n", false);
+    makeContentOnDomV2(timeToDom + "\n", false, makePanelOptionUI(panelOptions));
 
     while (true) {
+      const everyMinute = panelOptions.captureMinute.value as number;
+      const delay = (panelOptions.scanTimeInterval.value as number) * 1000;
+
+      const minuteMap = Array(Math.ceil(60 / everyMinute))
+        .fill(0)
+        .map((_, i) => i * everyMinute);
+
       const time = new Date();
       const [h, m] = getHMS(time);
 
       const [hLast, mLast] = getHMS(lastCaptured);
 
-      let allowCapture = true;
+      let captureValid = false;
 
       if (requireCondition) {
         // console.log("🚀 ~ main ~ minuteMap.includes(m):", minuteMap.includes(m));
@@ -35,30 +40,35 @@ async function main(delay = 3000, everyMinute = 30) {
         // console.log("======================================================================");
 
         if (minuteMap.includes(m) && mLast !== m && tradingViewCheckTime(time)) {
-          console.log("NOW I capture screen", new Date().toLocaleString());
-          allowCapture = true;
+          captureValid = true;
         } else {
-          console.log("Not capturing time");
-          allowCapture = false;
+          captureValid = false;
         }
       }
 
-      if (allowCapture) {
-        console.clear();
+      if (captureValid && panelOptions.allowCapture.value) {
+        console.log("NOW I capture screen", new Date().toLocaleString());
 
         const timeToDom = getTimeForDom();
         const diffXauVsGc1 = getDiffXauVsGc1ForDom();
-        makeContentOnDomV2(timeToDom + "\n" + diffXauVsGc1 + "\n", allowCapture);
+        makeContentOnDomV2(timeToDom + "\n" + diffXauVsGc1 + "\n", true, makePanelOptionUI(panelOptions));
 
         await capture("tradingViewGC1");
         lastCaptured = time;
+      } else if (panelOptions.updateRealtime.value) {
+        console.log("Not capturing time");
+
+        const timeToDom = getTimeForDom();
+        const diffXauVsGc1 = getDiffXauVsGc1ForDom();
+        makeContentOnDomV2(timeToDom + "\n" + diffXauVsGc1 + "\n", false, makePanelOptionUI(panelOptions));
       }
 
+      // await sleep(200);
       await sleep(delay);
     }
   } catch (error) {
     const timeToDom = getTimeForDom();
-    makeContentOnDomV2(timeToDom + "\n" + "Đã xảy ra lỗi và script đã dừng");
+    makeContentOnDomV2(timeToDom + "\n" + "Đã xảy ra lỗi và script đã dừng", false, makePanelOptionUI(panelOptions));
     console.log({ error });
   }
 }
