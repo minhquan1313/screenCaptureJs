@@ -45,16 +45,17 @@ async function main() {
         // console.log("🚀 ~ main ~ mLast !== m:", mLast !== m);
         // console.log("======================================================================");
 
+        console.log("NOW I capture screen", new Date().toLocaleString());
+
         if (minuteMap.includes(m) && mLast !== m && tradingViewCheckTime(time)) {
           captureValid = true;
         } else {
+          console.log("Not capturing time");
           captureValid = false;
         }
       }
 
       if (captureValid && panelOptions.allowCapture.value) {
-        console.log("NOW I capture screen", new Date().toLocaleString());
-
         const timeToDom = getTimeForDom();
         const diffXauVsGc1 = getDiffXauVsGc1ForDom();
         makeContentOnDomV2(timeToDom + "\n" + diffXauVsGc1 + "\n", true, makePanelOptionUI(panelOptions));
@@ -62,8 +63,6 @@ async function main() {
         await capture("tradingViewGC1");
         lastCaptured = time;
       } else if (panelOptions.updateRealtime.value) {
-        console.log("Not capturing time");
-
         const timeToDom = getTimeForDom();
         const diffXauVsGc1 = getDiffXauVsGc1ForDom();
         makeContentOnDomV2(timeToDom + "\n" + diffXauVsGc1 + "\n", false, makePanelOptionUI(panelOptions));

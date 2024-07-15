@@ -37,7 +37,7 @@ export const panelOptions: IPanelOption = {
   },
 
   allowCapture: {
-    value: false,
+    value: true,
     label: "Chụp màn hình",
   },
   updateRealtime: {
