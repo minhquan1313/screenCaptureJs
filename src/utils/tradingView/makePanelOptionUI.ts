@@ -48,7 +48,6 @@ export function makePanelOptionUI(options: IPanelOption) {
 
         valueEle.addEventListener("change", function () {
           options[key].value = Number(this.value);
-          console.log("🚀 ~ this.value:", this.value);
         });
       } else {
         valueEle = cssApply(document.createElement("input"), {
@@ -59,7 +58,6 @@ export function makePanelOptionUI(options: IPanelOption) {
         valueEle.value = String(value);
         valueEle.addEventListener("change", function () {
           options[key].value = Number(this.value);
-          console.log("🚀 ~ this.value:", this.value);
         });
       }
     } else {
@@ -69,7 +67,6 @@ export function makePanelOptionUI(options: IPanelOption) {
       valueEle.checked = value;
       valueEle.addEventListener("change", function () {
         options[key].value = this.checked;
-        console.log("🚀 ~ this.checked:", this.checked);
       });
     }
 

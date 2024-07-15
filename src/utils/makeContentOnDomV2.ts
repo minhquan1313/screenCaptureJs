@@ -10,6 +10,15 @@ let count = Number(localStorage.getItem("mtb_counter")) || 0;
 let vanie: Vanie;
 let panel: HTMLElement;
 
+const destroyListener: (() => void)[] = [];
+
+export function onContentWindowDestroyAttach(listener: () => void) {
+  destroyListener.push(listener);
+}
+function onContentWindowDestroy() {
+  destroyListener.forEach((listener) => listener());
+}
+
 export function makeContentOnDomV2(str: string, withCount = true, controlPanel?: HTMLElement) {
   const boxDiv = getBoxDiv();
 
@@ -24,7 +33,6 @@ export function makeContentOnDomV2(str: string, withCount = true, controlPanel?:
   boxDiv.lienzo = contentDiv;
 
   const { clientWidth: wC, clientHeight: hC } = contentDiv;
-  // console.log(contentDiv.getBoundingClientRect(), contentDiv.getClientRects());
 
   const { w, h } = boxDiv.dLienzo;
   if (w < wC || h < hC) boxDiv.dLienzo = { w: wC, h: hC };
@@ -106,6 +114,7 @@ function initVanieWindow() {
   (window as any)["vani"] = vani;
 
   appendVanieToToolBar(vani, appName);
+  vani.addEventListener("cerrar", onContentWindowDestroy);
 
   return vani;
 }

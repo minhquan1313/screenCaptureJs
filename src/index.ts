@@ -2,7 +2,7 @@ import { panelOptions } from "@/constants/panelOptions";
 import { capture } from "@/utils/capture";
 import { getHMS } from "@/utils/getHMS";
 import { getTimeForDom } from "@/utils/getTimeForDom";
-import { makeContentOnDomV2 } from "@/utils/makeContentOnDomV2";
+import { makeContentOnDomV2, onContentWindowDestroyAttach } from "@/utils/makeContentOnDomV2";
 import { sleep } from "@/utils/sleep";
 import { getDiffXauVsGc1ForDom } from "@/utils/tradingView/getDiffXauVsGc1ForDom";
 import { makePanelOptionUI } from "@/utils/tradingView/makePanelOptionUI";
@@ -18,7 +18,13 @@ async function main() {
     const timeToDom = getTimeForDom();
     makeContentOnDomV2(timeToDom + "\n", false, makePanelOptionUI(panelOptions));
 
-    while (true) {
+    let keepRunning = true;
+
+    onContentWindowDestroyAttach(() => {
+      keepRunning = false;
+    });
+
+    while (keepRunning) {
       const everyMinute = panelOptions.captureMinute.value as number;
       const delay = (panelOptions.scanTimeInterval.value as number) * 1000;
 

@@ -3,7 +3,7 @@ import { IPanelOption } from "@/utils/tradingView/makePanelOptionUI";
 export const panelOptions: IPanelOption = {
   captureMinute: {
     value: 30,
-    label: "Chụp sau (phút)",
+    label: "Chụp sau",
     select: [
       {
         value: 1,
