@@ -1,5 +1,6 @@
 import { addPlayReplayTDV } from "@/addon/addPlayReplayTDV";
 import { addQuickTimeChangeTDV } from "@/addon/addQuickTimeChangeTDV";
+import { addXauScale1 } from "@/addon/addXauScale1";
 
 async function makeTradingViewAddonBtn() {
   //   let tdvBtn: Element | null = await getTradingViewRightToolBarBtnAsync();
@@ -14,6 +15,7 @@ async function makeTradingViewAddonBtn() {
 
   await addQuickTimeChangeTDV();
   await addPlayReplayTDV();
+  await addXauScale1();
 }
 
 makeTradingViewAddonBtn();

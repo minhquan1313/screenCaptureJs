@@ -8,7 +8,7 @@ let count = Number(localStorage.getItem("mtb_counter")) || 0;
 // const id = "__mtb_time__";
 // const idDom = "#" + id;
 let vanie: Vanie;
-let panel: HTMLElement;
+// let panel: HTMLElement;
 
 const destroyListener: (() => void)[] = [];
 
@@ -24,11 +24,13 @@ export function makeContentOnDomV2(str: string, withCount = true, controlPanel?:
 
   const contentDiv = makeContentDivV2(str, withCount);
   if (controlPanel) {
-    panel = controlPanel;
+    // panel = controlPanel;
+
     contentDiv.appendChild(controlPanel);
-  } else if (panel) {
-    contentDiv.appendChild(panel);
   }
+  // else if (panel) {
+  //   contentDiv.appendChild(panel);
+  // }
 
   boxDiv.lienzo = contentDiv;
 
