@@ -4,6 +4,7 @@ import { textToDom } from "@/utils/textToDom";
 import { chartScaleFix } from "@/utils/tradingView/chartScaleFix";
 import { createCopyTradingViewRightToolBar } from "@/utils/tradingView/createCopyTradingViewRightToolBar";
 import { getTradingViewRightToolBarBtn } from "@/utils/tradingView/getTradingViewRightToolBarBtn";
+import { tradingViewBtnHightLight } from "@/utils/tradingView/tradingViewBtnHightLight";
 import { whileFind } from "@/utils/whileSleep";
 
 export async function addXauScale1() {
@@ -23,7 +24,11 @@ export async function addXauScale1() {
     sleepFn: sleep,
   });
 
-  newBtn.addEventListener("click", chartScaleFix);
+  newBtn.addEventListener("click", async () => {
+    tradingViewBtnHightLight(newBtn, true);
+    await chartScaleFix();
+    tradingViewBtnHightLight(newBtn, false);
+  });
 
   tradingViewToolBtn.parentElement?.insertBefore(newBtn, tradingViewToolBtn);
 }

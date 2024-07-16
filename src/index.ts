@@ -45,9 +45,8 @@ async function main() {
         // console.log("🚀 ~ main ~ mLast !== m:", mLast !== m);
         // console.log("======================================================================");
 
-        console.log("NOW I capture screen", new Date().toLocaleString());
-
         if (minuteMap.includes(m) && mLast !== m && tradingViewCheckTime(time)) {
+          console.log("NOW I capture screen", new Date().toLocaleString());
           captureValid = true;
         } else {
           console.log("Not capturing time");
@@ -75,6 +74,8 @@ async function main() {
     const timeToDom = getTimeForDom();
     makeContentOnDomV2(timeToDom + "\n" + "Đã xảy ra lỗi và script đã dừng", false, makePanelOptionUI(panelOptions));
     console.log({ error });
+
+    return main();
   }
 }
 
