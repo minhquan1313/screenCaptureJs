@@ -8,7 +8,7 @@ import { tradingViewBtnHightLight } from "@/utils/tradingView/tradingViewBtnHigh
 import { updateCopyTradingViewRightToolBar } from "@/utils/tradingView/updateCopyTradingViewRightToolBar";
 import { whileFind } from "@/utils/whileSleep";
 
-let delay = 1;
+let delay = Number(localStorage.getItem("mtb.tdv.play_replay_delay")) || 1;
 const delayGap = 0.5;
 const delayMin = 0.5;
 const delayMax = 10;
@@ -33,6 +33,8 @@ export async function addPlayReplayTDV() {
   let isPlaying = false;
 
   const update = () => {
+    localStorage.setItem("mtb.tdv.play_replay_delay", String(delay));
+
     updateCopyTradingViewRightToolBar({
       btnCopy: tdvBtn,
       name: getName(),

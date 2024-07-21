@@ -75,7 +75,7 @@ async function main() {
     makeContentOnDomV2(timeToDom + "\n" + "Đã xảy ra lỗi và script đã dừng", false, makePanelOptionUI(panelOptions));
     console.log({ error });
 
-    return main();
+    // return main();
   }
 }
 
