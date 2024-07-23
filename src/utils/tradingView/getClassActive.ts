@@ -1,6 +1,6 @@
 import { getXPath } from "@/utils/getXPath";
 import { sleep } from "@/utils/sleep";
-import { whileFind } from "@/utils/whileSleep";
+import { whileFind } from "@/utils/whileFind";
 
 export async function getClassActive() {
   const btnInToolbar = await whileFind({

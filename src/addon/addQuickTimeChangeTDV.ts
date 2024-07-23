@@ -4,7 +4,7 @@ import { sleep } from "@/utils/sleep";
 import { createCopyTradingViewRightToolBar } from "@/utils/tradingView/createCopyTradingViewRightToolBar";
 import { getTradingViewRightToolBarBtn } from "@/utils/tradingView/getTradingViewRightToolBarBtn";
 import { tradingViewBtnHightLight } from "@/utils/tradingView/tradingViewBtnHightLight";
-import { whileFind } from "@/utils/whileSleep";
+import { whileFind } from "@/utils/whileFind";
 
 const data = [
   {

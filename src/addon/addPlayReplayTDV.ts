@@ -6,7 +6,7 @@ import { createCopyTradingViewRightToolBar } from "@/utils/tradingView/createCop
 import { getTradingViewRightToolBarBtn } from "@/utils/tradingView/getTradingViewRightToolBarBtn";
 import { tradingViewBtnHightLight } from "@/utils/tradingView/tradingViewBtnHightLight";
 import { updateCopyTradingViewRightToolBar } from "@/utils/tradingView/updateCopyTradingViewRightToolBar";
-import { whileFind } from "@/utils/whileSleep";
+import { whileFind } from "@/utils/whileFind";
 
 let delay = Number(localStorage.getItem("mtb.tdv.play_replay_delay")) || 1;
 const delayGap = 0.5;

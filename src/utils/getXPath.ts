@@ -1,3 +1,3 @@
-export function getXPath(xpath: string) {
-  return document.evaluate(xpath, document).iterateNext() as HTMLElement | null;
+export function getXPath(xpath: string, ref: Node = document) {
+  return document.evaluate(xpath, ref).iterateNext() as HTMLElement | null;
 }

@@ -1,5 +1,7 @@
-import { addXauScale1 } from "@/addon/addXauScale1";
+import { getXPath } from "@/utils/getXPath";
 
 console.clear();
 
-addXauScale1();
+const t = getXPath("//canvas[2]");
+const event = new CustomEvent("contextmenu");
+t?.dispatchEvent(event);
