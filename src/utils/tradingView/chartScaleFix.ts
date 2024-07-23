@@ -30,7 +30,7 @@ export function chartScaleFix(param: IParams = {}) {
       });
 
       settingBtn.click();
-      // -==-
+
       xpath = '//span[text()="Scales and lines"]';
 
       const scaleNLineBtn = await whileFind({
@@ -56,6 +56,21 @@ export function chartScaleFix(param: IParams = {}) {
 
       input.focus();
 
+      // input.value = "" + 1.1;
+      // input.dispatchEvent(new Event("change"));
+      // await sleep(100);
+      // input.value = "" + 1.1;
+      // input.dispatchEvent(new Event("input", { bubbles: true }));
+      // await sleep(100);
+      // input.blur();
+      // return;
+      // input.value = "" + 1.1;
+      // input.dispatchEvent(new Event("keydown", { bubbles: true }));
+      // input.value = "" + 1.1;
+      // input.dispatchEvent(new Event("keyup", { bubbles: true }));
+      // input.value = "" + 1.1;
+      // input.dispatchEvent(new Event("keypress", { bubbles: true }));
+
       const currentSelectedSymbol = getCurrentSelectedSym();
       if (valueHint && currentSelectedSymbol) {
         for (const symName in valueHint) {
@@ -64,21 +79,37 @@ export function chartScaleFix(param: IParams = {}) {
           const value = valueHint[symName];
 
           appendValueHint(value);
+
+          input.value = "" + value.toFixed(5);
         }
       }
 
-      async function blurHandler() {
+      async function inpHandler() {
+        await sleep(100);
+        input.blur();
         await sleep(100);
 
         xpath = '//button[@data-name="submit-button"]';
         getXPath(xpath)?.click();
 
-        input.removeEventListener("blur", blurHandler);
+        input.removeEventListener("input", inpHandler);
 
         rs();
       }
 
-      input.addEventListener("blur", blurHandler);
+      input.addEventListener("input", inpHandler);
+      // async function blurHandler() {
+      //   await sleep(100);
+
+      //   xpath = '//button[@data-name="submit-button"]';
+      //   getXPath(xpath)?.click();
+
+      //   input.removeEventListener("blur", blurHandler);
+
+      //   rs();
+      // }
+
+      // input.addEventListener("blur", blurHandler);
     } catch (error) {
       console.log("Error xau scale", error);
     }
@@ -86,9 +117,6 @@ export function chartScaleFix(param: IParams = {}) {
 }
 
 export function getCurrentSelectedSym() {
-  // return getXPath(
-  //   '//div[@class="widgetbar-widgetbody"]/div[contains(@class,"watchlist")]//div[contains(@class,"listContainer")]/div/div[.//div[contains(@class,"active")]]',
-  // );
   const xpath =
     '//div[@class="widgetbar-widgetbody"]/div[contains(@class,"watchlist")]//div[contains(@class,"listContainer")]/div/div[.//div[contains(@class,"active")]]';
 
@@ -141,6 +169,7 @@ function appendValueHint(value: number) {
   });
 
   inputWrapper.appendChild(div);
-  navigator.clipboard.writeText(String(value));
-  div.textContent = "Đã copy: " + value;
+  // navigator.clipboard.writeText(String(value));
+  div.textContent = "Gõ: " + 1;
+  // div.textContent = "Đã copy: " + value;
 }
