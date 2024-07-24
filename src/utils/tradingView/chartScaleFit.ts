@@ -1,9 +1,9 @@
 import { getXPath } from "@/utils/getXPath";
 import { sleep } from "@/utils/sleep";
-import { getAutoFitSScreenBtn, isAutoFitSScreen } from "@/utils/tradingView/isAutoFitSScreen";
+import { getAutoFitScreenBtn, isAutoFitSScreen } from "@/utils/tradingView/isAutoFitScreen";
 import { whileFind } from "@/utils/whileFind";
 
-const delay = 50;
+const delay = 100;
 export async function chartScaleFit() {
   const hideAllArrow = getXPath('//*[@data-name="hide-all"]//button[contains(@class,"arrow")]');
   if (!hideAllArrow) return;
@@ -38,12 +38,12 @@ export async function chartScaleFit() {
     await sleep(delay);
 
     if (!isAutoFitSScreen()) {
-      getAutoFitSScreenBtn()?.click();
+      getAutoFitScreenBtn()?.click();
       await sleep(delay);
     }
   }
 
-  getAutoFitSScreenBtn()?.click();
+  getAutoFitScreenBtn()?.click();
 
   hideAllArrow.click();
   (

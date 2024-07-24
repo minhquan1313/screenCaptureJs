@@ -47,21 +47,6 @@ export async function addXauScale1() {
     sleepFn: sleep,
   });
 
-  newBtn.addEventListener("click", async () => {
-    try {
-      tradingViewBtnHightLight(newBtn, true);
-
-      await chartScaleFit();
-
-      await chartScaleFix({ valueHint });
-    } catch (error) {}
-    tradingViewBtnHightLight(newBtn, false);
-  });
-  newBtnAuto.addEventListener("click", async () => {
-    allowAuto = !allowAuto;
-    tradingViewBtnHightLight(newBtnAuto, allowAuto);
-  });
-
   tradingViewBtnHightLight(newBtnAuto, allowAuto);
   tradingViewToolBtn.parentElement?.insertBefore(newBtn, tradingViewToolBtn);
   tradingViewToolBtn.parentElement?.insertBefore(newBtnAuto, tradingViewToolBtn);
@@ -100,6 +85,30 @@ export async function addXauScale1() {
 
     await chartScaleFix({ valueHint });
   };
+
+  newBtn.addEventListener("click", async () => {
+    try {
+      tradingViewBtnHightLight(newBtn, true);
+
+      await whileFind({
+        find: function () {
+          return !isChartLoading();
+        },
+        sleepFn: sleep,
+        delay: 50,
+      });
+
+      // await chartScaleFit();
+
+      await chartScaleFix({ valueHint });
+    } catch (error) {}
+    tradingViewBtnHightLight(newBtn, false);
+  });
+
+  newBtnAuto.addEventListener("click", async () => {
+    allowAuto = !allowAuto;
+    tradingViewBtnHightLight(newBtnAuto, allowAuto);
+  });
 
   watchList.addEventListener("click", fitHandle);
 }

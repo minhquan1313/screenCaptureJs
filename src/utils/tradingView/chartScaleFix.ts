@@ -22,7 +22,8 @@ export function chartScaleFix(param: IParams = {}) {
 
       await triggerMouseDownUp(settingEleToTrigger);
 
-      xpath = '//span[text()="Settings…"]';
+      xpath = '//tr[@data-role="menuitem"][last()]';
+      // xpath = '//span[text()="Settings…"]';
 
       const settingBtn = await whileFind({
         find: () => getXPath(xpath),
@@ -31,7 +32,8 @@ export function chartScaleFix(param: IParams = {}) {
 
       settingBtn.click();
 
-      xpath = '//span[text()="Scales and lines"]';
+      xpath = '//*[@data-name="scales"]';
+      // xpath = '//span[text()="Scales and lines"]';
 
       const scaleNLineBtn = await whileFind({
         find: () => getXPath(xpath),
@@ -39,6 +41,7 @@ export function chartScaleFix(param: IParams = {}) {
       });
       scaleNLineBtn.click();
 
+      // xpath = '//div[@data-section-name="lockScale"]//input[1]';
       xpath = '//div[@data-section-name="lockScale"]//input[@type="checkbox"]';
       const checkBox = (await whileFind({
         find: () => getXPath(xpath),
@@ -81,6 +84,8 @@ export function chartScaleFix(param: IParams = {}) {
           appendValueHint(value);
 
           input.value = "" + value.toFixed(5);
+
+          break;
         }
       }
 

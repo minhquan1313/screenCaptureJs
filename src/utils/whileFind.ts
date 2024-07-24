@@ -7,7 +7,7 @@ interface IParams<T> {
 
 export function whileFind<T>(value: IParams<T>) {
   return new Promise<Exclude<T, undefined | null | false>>(async (rs, rj) => {
-    const { sleepFn, delay = 100, timeout = 10000, find } = value;
+    const { sleepFn, delay = 100, timeout = 30000, find } = value;
 
     let allowRun = true;
 

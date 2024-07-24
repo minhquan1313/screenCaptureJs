@@ -1,7 +1,7 @@
 import { getClassActive } from "@/utils/tradingView/getClassActive";
 
-export function isTradingViewBtnHightLighted(btn: Element) {
-  const activeClass = getClassActive();
+export async function isTradingViewBtnHightLighted(btn: Element) {
+  const activeClass = await getClassActive();
 
   if (!activeClass) return false;
 
