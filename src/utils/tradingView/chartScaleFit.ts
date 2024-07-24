@@ -3,7 +3,7 @@ import { sleep } from "@/utils/sleep";
 import { getAutoFitScreenBtn, isAutoFitSScreen } from "@/utils/tradingView/isAutoFitScreen";
 import { whileFind } from "@/utils/whileFind";
 
-const delay = 100;
+const delay = 50;
 export async function chartScaleFit() {
   const hideAllArrow = getXPath('//*[@data-name="hide-all"]//button[contains(@class,"arrow")]');
   if (!hideAllArrow) return;
