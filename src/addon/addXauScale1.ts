@@ -51,13 +51,11 @@ export async function addXauScale1() {
   // tradingViewToolBtn.parentElement?.insertBefore(newBtn, tradingViewToolBtn);
   tradingViewToolBtn.parentElement?.insertBefore(newBtnAuto, tradingViewToolBtn);
 
-  const watchList = await whileFind({
-    find: () => getXPath('//div[@class="widgetbar-widgetbody"]/div[contains(@class,"watchlist")]//div[contains(@class,"listContainer")]/div'),
-    sleepFn: sleep,
-  });
-
-  const fitHandle = async (e?: MouseEvent) => {
+  const fitHandle = async (e: MouseEvent) => {
     if (!allowAuto) return;
+    const target = e.target as HTMLElement | null;
+    if (!target) return;
+
     await sleep(100);
     await whileFind({
       find: function () {
@@ -67,19 +65,22 @@ export async function addXauScale1() {
       delay: 50,
     });
 
-    // if (isAutoFitSScreen()) return;
+    const watchList = await whileFind({
+      find: () => getXPath('//div[@class="widgetbar-widgetbody"]/div[contains(@class,"watchlist")]//div[contains(@class,"listContainer")]/div'),
+      sleepFn: sleep,
+    });
 
-    if (e) {
-      const row = (e.target as HTMLElement).closest('div[style*="position: absolute"]');
-      if (!row) return;
-      const symbol = getXPath('.//span[contains(@class,"symbolNameText")]', row)?.textContent;
+    if (!watchList.contains(target)) return;
 
-      if (!symbol) return;
-    }
+    const row = target.closest('div[style*="position: absolute"]');
+    if (!row) return;
+    let symbol = getXPath('.//span[contains(@class,"symbolNameText")]', row)?.textContent;
+
+    if (!symbol) return;
 
     await chartScaleFit();
 
-    const symbol = getCurrentSelectedSym();
+    symbol = getCurrentSelectedSym();
 
     if (!symbol || !checkSymbolNameFromHint(valueHint, symbol, true)) return;
 
@@ -110,5 +111,5 @@ export async function addXauScale1() {
     tradingViewBtnHightLight(newBtnAuto, allowAuto);
   });
 
-  watchList.addEventListener("click", fitHandle);
+  window.addEventListener("click", fitHandle);
 }

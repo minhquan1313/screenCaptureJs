@@ -1,7 +1,3 @@
-import { getXPath } from "@/utils/getXPath";
+async function main() {}
 
-console.clear();
-
-const t = getXPath("//canvas[2]");
-const event = new CustomEvent("contextmenu");
-t?.dispatchEvent(event);
+main();

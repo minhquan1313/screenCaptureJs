@@ -6,6 +6,7 @@ import { whileFind } from "@/utils/whileFind";
 const delay = 50;
 export async function chartScaleFit() {
   const hideAllArrow = getXPath('//*[@data-name="hide-all"]//button[contains(@class,"arrow")]');
+  // console.log(`~🤖 chartScaleFit 🤖~ `, { hideAllArrow });
   if (!hideAllArrow) return;
 
   hideAllArrow.click();
@@ -13,12 +14,13 @@ export async function chartScaleFit() {
 
   const hideAllXp = '//*[@data-name="hide-all" and @data-role="menuitem"]';
 
-  const hideAll = await whileFind({
+  let hideAll = await whileFind({
     find: function () {
       return getXPath(hideAllXp);
     },
     sleepFn: sleep,
   });
+  // console.log(`~🤖 chartScaleFit 🤖~ `, { hideAll }, hideAll.className);
 
   if (!hideAll.className.includes("isActive")) {
     hideAll.click();
@@ -34,6 +36,8 @@ export async function chartScaleFit() {
     await sleep(delay);
 
     const reset = getXPath('//tr[@data-role="menuitem" and .//span[text()="Alt + R"]]');
+    // console.log(`~🤖 chartScaleFit 🤖~ `, { reset, autoFit: isAutoFitSScreen() });
+
     reset?.click();
     await sleep(delay);
 
@@ -43,15 +47,16 @@ export async function chartScaleFit() {
     }
   }
 
+  // console.log(`~🤖 chartScaleFit 🤖~ `, { hideAllArrow, autoFit: isAutoFitSScreen() });
   getAutoFitScreenBtn()?.click();
+  await sleep(delay);
 
   hideAllArrow.click();
-  (
-    await whileFind({
-      find: function () {
-        return getXPath(hideAllXp);
-      },
-      sleepFn: sleep,
-    })
-  ).click();
+  hideAll = await whileFind({
+    find: function () {
+      return getXPath(hideAllXp);
+    },
+    sleepFn: sleep,
+  });
+  hideAll.click();
 }

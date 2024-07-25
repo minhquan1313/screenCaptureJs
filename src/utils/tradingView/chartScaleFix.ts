@@ -22,7 +22,7 @@ export function chartScaleFix(param: IParams = {}) {
 
       await triggerMouseDownUp(settingEleToTrigger);
 
-      xpath = '//tr[@data-role="menuitem"][last()]';
+      xpath = '//tr[@data-role="menuitem" and ./td[contains(@class,"icon")]//*[local-name()="svg"]][last()]';
       // xpath = '//span[text()="Settings…"]';
 
       const settingBtn = await whileFind({
@@ -89,6 +89,15 @@ export function chartScaleFix(param: IParams = {}) {
         }
       }
 
+      async function clickHandle() {
+        if (getXPath('//div[@data-section-name="lockScale"]//input[@type="text"]')) return;
+
+        input.removeEventListener("input", inpHandler);
+        window.removeEventListener("click", clickHandle);
+        input.removeEventListener("blur", inpHandler);
+
+        rs();
+      }
       async function inpHandler() {
         await sleep(100);
         input.blur();
@@ -98,11 +107,17 @@ export function chartScaleFix(param: IParams = {}) {
         getXPath(xpath)?.click();
 
         input.removeEventListener("input", inpHandler);
+        input.removeEventListener("blur", inpHandler);
+        window.removeEventListener("click", clickHandle);
 
         rs();
       }
 
       input.addEventListener("input", inpHandler);
+      input.addEventListener("blur", inpHandler);
+
+      window.addEventListener("click", clickHandle);
+
       // async function blurHandler() {
       //   await sleep(100);
 
