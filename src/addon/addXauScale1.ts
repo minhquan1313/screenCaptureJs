@@ -3,7 +3,7 @@ import { getXPath } from "@/utils/getXPath";
 import { sleep } from "@/utils/sleep";
 import { textToDom } from "@/utils/textToDom";
 import { chartScaleFit } from "@/utils/tradingView/chartScaleFit";
-import { chartScaleFix, checkSymbolNameFromHint, getCurrentSelectedSym } from "@/utils/tradingView/chartScaleFix";
+import { chartScaleFix, getCurrentSelectedSym } from "@/utils/tradingView/chartScaleFix";
 import { createCopyTradingViewRightToolBar } from "@/utils/tradingView/createCopyTradingViewRightToolBar";
 import { getTradingViewRightToolBarBtn } from "@/utils/tradingView/getTradingViewRightToolBarBtn";
 import { isChartLoading } from "@/utils/tradingView/isChartLoading";
@@ -82,7 +82,7 @@ export async function addXauScale1() {
 
     symbol = getCurrentSelectedSym();
 
-    if (!symbol || !checkSymbolNameFromHint(valueHint, symbol, true)) return;
+    if (!symbol) return;
 
     await chartScaleFix({ valueHint });
   };

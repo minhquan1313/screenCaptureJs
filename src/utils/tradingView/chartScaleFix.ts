@@ -75,6 +75,7 @@ export function chartScaleFix(param: IParams = {}) {
       // input.dispatchEvent(new Event("keypress", { bubbles: true }));
 
       const currentSelectedSymbol = getCurrentSelectedSym();
+      let supported = false;
       if (valueHint && currentSelectedSymbol) {
         for (const symName in valueHint) {
           if (!checkSymbolName(currentSelectedSymbol, symName, true)) continue;
@@ -84,7 +85,7 @@ export function chartScaleFix(param: IParams = {}) {
           appendValueHint(value);
 
           input.value = "" + value.toFixed(5);
-
+          supported = true;
           break;
         }
       }
@@ -112,8 +113,9 @@ export function chartScaleFix(param: IParams = {}) {
 
         rs();
       }
-
-      input.addEventListener("input", inpHandler);
+      if (supported) {
+        input.addEventListener("input", inpHandler);
+      }
       input.addEventListener("blur", inpHandler);
 
       window.addEventListener("click", clickHandle);
