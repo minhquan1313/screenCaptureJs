@@ -5,8 +5,10 @@ import { whileFind } from "@/utils/whileFind";
 
 const delay = 50;
 export async function chartScaleFit() {
+  /**
+   * Hide all indicators
+   */
   const hideAllArrow = getXPath('//*[@data-name="hide-all"]//button[contains(@class,"arrow")]');
-  // console.log(`~🤖 chartScaleFit 🤖~ `, { hideAllArrow });
   if (!hideAllArrow) return;
 
   hideAllArrow.click();
@@ -20,7 +22,6 @@ export async function chartScaleFit() {
     },
     sleepFn: sleep,
   });
-  // console.log(`~🤖 chartScaleFit 🤖~ `, { hideAll }, hideAll.className);
 
   if (!hideAll.className.includes("isActive")) {
     hideAll.click();
@@ -29,26 +30,36 @@ export async function chartScaleFit() {
   }
   await sleep(delay);
 
-  if (!isAutoFitSScreen()) {
-    const chart = getXPath("//canvas[2]");
-    const event = new CustomEvent("contextmenu");
-    chart?.dispatchEvent(event);
-    await sleep(delay);
+  const autoFitScreenBtnList = getAutoFitScreenBtn();
 
-    const reset = getXPath('//tr[@data-role="menuitem" and .//span[text()="Alt + R"]]');
-    // console.log(`~🤖 chartScaleFit 🤖~ `, { reset, autoFit: isAutoFitSScreen() });
+  let index = 1;
+  for await (const btn of autoFitScreenBtnList) {
+    if (!isAutoFitSScreen(btn)) {
+      const chartXpath =
+        '(//div[contains(@class,"chart-markup-table") and contains(@class,"pane") and .//div[contains(@class,"legendMainSourceWrapper")]])[' +
+        index +
+        "]";
+      const chart = getXPath(chartXpath);
 
-    reset?.click();
-    await sleep(delay);
-
-    if (!isAutoFitSScreen()) {
-      getAutoFitScreenBtn()?.click();
+      const event = new CustomEvent("contextmenu");
+      chart?.dispatchEvent(event);
       await sleep(delay);
+
+      const reset = getXPath('//tr[@data-role="menuitem" and .//span[text()="Alt + R"]]');
+
+      reset?.click();
+      await sleep(delay);
+
+      if (!isAutoFitSScreen(btn)) {
+        btn.click();
+        await sleep(delay);
+      }
     }
+    //
+    index++;
   }
 
-  // console.log(`~🤖 chartScaleFit 🤖~ `, { hideAllArrow, autoFit: isAutoFitSScreen() });
-  getAutoFitScreenBtn()?.click();
+  autoFitScreenBtnList[0]?.click();
   await sleep(delay);
 
   hideAllArrow.click();

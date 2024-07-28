@@ -22,7 +22,7 @@ const valueHint = {
 let allowAuto = true;
 
 export async function addXauScale1() {
-  // const iconEle = textToDom(svg);
+  const iconEle = textToDom(svg);
   const iconEleAuto = textToDom(svg);
 
   const tradingViewToolBtn = await whileFind({
@@ -30,14 +30,14 @@ export async function addXauScale1() {
     sleepFn: sleep,
   });
 
-  // const newBtn = await whileFind({
-  //   find: () =>
-  //     createCopyTradingViewRightToolBar(iconEle, "Khoá thu phóng", {
-  //       height: "26px",
-  //       width: "26px",
-  //     }),
-  //   sleepFn: sleep,
-  // });
+  const newBtn = await whileFind({
+    find: () =>
+      createCopyTradingViewRightToolBar(iconEle, "Khoá thu phóng", {
+        height: "26px",
+        width: "26px",
+      }),
+    sleepFn: sleep,
+  });
   const newBtnAuto = await whileFind({
     find: () =>
       createCopyTradingViewRightToolBar(iconEleAuto, "Khoá thu phóng tự động", {
@@ -48,14 +48,14 @@ export async function addXauScale1() {
   });
 
   tradingViewBtnHightLight(newBtnAuto, allowAuto);
-  // tradingViewToolBtn.parentElement?.insertBefore(newBtn, tradingViewToolBtn);
+  tradingViewToolBtn.parentElement?.insertBefore(newBtn, tradingViewToolBtn);
   tradingViewToolBtn.parentElement?.insertBefore(newBtnAuto, tradingViewToolBtn);
 
   const fitHandle = async (e: MouseEvent) => {
     if (!allowAuto) return;
     const target = e.target as HTMLElement | null;
     if (!target) return;
-
+    // console.clear();
     await sleep(100);
     await whileFind({
       find: function () {
@@ -78,6 +78,8 @@ export async function addXauScale1() {
 
     if (!symbol) return;
 
+    // Start process
+
     await chartScaleFit();
 
     symbol = getCurrentSelectedSym();
@@ -87,24 +89,24 @@ export async function addXauScale1() {
     await chartScaleFix({ valueHint });
   };
 
-  // newBtn.addEventListener("click", async () => {
-  //   try {
-  //     tradingViewBtnHightLight(newBtn, true);
+  newBtn.addEventListener("click", async () => {
+    try {
+      tradingViewBtnHightLight(newBtn, true);
 
-  //     await whileFind({
-  //       find: function () {
-  //         return !isChartLoading();
-  //       },
-  //       sleepFn: sleep,
-  //       delay: 50,
-  //     });
+      await whileFind({
+        find: function () {
+          return !isChartLoading();
+        },
+        sleepFn: sleep,
+        delay: 50,
+      });
 
-  //     // await chartScaleFit();
+      // await chartScaleFit();
 
-  //     await chartScaleFix({ valueHint });
-  //   } catch (error) {}
-  //   tradingViewBtnHightLight(newBtn, false);
-  // });
+      await chartScaleFix({ valueHint, settingOfFocusedChart: true });
+    } catch (error) {}
+    tradingViewBtnHightLight(newBtn, false);
+  });
 
   newBtnAuto.addEventListener("click", async () => {
     allowAuto = !allowAuto;

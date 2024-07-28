@@ -8,6 +8,10 @@ import { whileFind } from "@/utils/whileFind";
 
 const data = [
   {
+    value: "UTC",
+    label: "UTC",
+  },
+  {
     value: "London",
     label: "T+1",
   },

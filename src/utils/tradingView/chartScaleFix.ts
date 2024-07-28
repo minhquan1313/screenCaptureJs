@@ -8,14 +8,25 @@ interface IParams {
   valueHint?: {
     [symbol: string]: number;
   };
+  settingOfFocusedChart?: boolean;
 }
+const focusedChartXpath =
+  '//div[contains(@class,"chart-container") and contains(@class,"active") and not(contains(@class,"inactive"))]//div[@class="chart-markup-table" and .//div[contains(@class,"legendMainSourceWrapper")]]';
+const anyChartXpath = '//div[@class="chart-markup-table" and .//div[contains(@class,"legendMainSourceWrapper")]]';
 
 export function chartScaleFix(param: IParams = {}) {
   return new Promise<void>(async (rs) => {
     try {
-      const { valueHint } = param;
+      const { valueHint, settingOfFocusedChart = false } = param;
 
-      let xpath = '(//*[contains(@class,"price-axis-container")])[last()]/div';
+      // ('//div[@class="chart-markup-table" and .//div[contains(@class,"legendMainSourceWrapper")]]/div[last()]/div[last()]/div');
+
+      // const settingEleToTriggerList = getXPathList(
+      //   '//div[@class="chart-markup-table" and .//div[contains(@class,"legendMainSourceWrapper")]]/div[last()]/div[last()]/div',
+      // );
+
+      // for await (const settingEleToTrigger of settingEleToTriggerList) {
+      let xpath = (settingOfFocusedChart ? focusedChartXpath : anyChartXpath) + "/div[last()]/div[last()]/div";
       const settingEleToTrigger = getXPath(xpath);
 
       if (!settingEleToTrigger) return;
@@ -104,6 +115,7 @@ export function chartScaleFix(param: IParams = {}) {
         input.blur();
         await sleep(100);
 
+        // xpath = '//span[contains(@class,"applyToAllButton")]/button|//button[@data-name="submit-button"]';
         xpath = '//button[@data-name="submit-button"]';
         getXPath(xpath)?.click();
 
