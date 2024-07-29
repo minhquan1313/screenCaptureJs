@@ -1,4 +1,5 @@
 import svg from "@/assets/svg/expand.svg";
+import svgScale from "@/assets/svg/scale.svg";
 import { getXPath } from "@/utils/getXPath";
 import { sleep } from "@/utils/sleep";
 import { textToDom } from "@/utils/textToDom";
@@ -22,7 +23,7 @@ const valueHint = {
 let allowAuto = true;
 
 export async function addXauScale1() {
-  const iconEle = textToDom(svg);
+  const iconEle = textToDom(svgScale);
   const iconEleAuto = textToDom(svg);
 
   const tradingViewToolBtn = await whileFind({

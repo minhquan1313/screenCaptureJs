@@ -34,28 +34,29 @@ export async function chartScaleFit() {
 
   let index = 1;
   for await (const btn of autoFitScreenBtnList) {
-    if (!isAutoFitSScreen(btn)) {
-      const chartXpath =
-        '(//div[contains(@class,"chart-markup-table") and contains(@class,"pane") and .//div[contains(@class,"legendMainSourceWrapper")]])[' +
-        index +
-        "]";
-      const chart = getXPath(chartXpath);
-
-      const event = new CustomEvent("contextmenu");
-      chart?.dispatchEvent(event);
+    // if (!isAutoFitSScreen(btn)) {
+    const chartXpath =
+      '(//div[contains(@class,"chart-markup-table") and contains(@class,"pane") and .//div[contains(@class,"legendMainSourceWrapper")]])[' +
+      index +
+      "]//canvas[2]";
+    const chart = getXPath(chartXpath);
+    if (chart) {
+      const event = new MouseEvent("contextmenu");
+      chart.dispatchEvent(event);
       await sleep(delay);
-
       const reset = getXPath('//tr[@data-role="menuitem" and .//span[text()="Alt + R"]]');
-
-      reset?.click();
-      await sleep(delay);
-
-      if (!isAutoFitSScreen(btn)) {
-        btn.click();
+      console.log(`~🤖 chartScaleFit 🤖~ `, { chartXpath, chart, reset, event });
+      if (reset) {
+        reset.click();
         await sleep(delay);
       }
     }
-    //
+
+    if (!isAutoFitSScreen(btn)) {
+      btn.click();
+      await sleep(delay);
+    }
+    // }
     index++;
   }
 

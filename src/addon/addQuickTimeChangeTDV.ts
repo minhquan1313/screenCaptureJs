@@ -22,68 +22,66 @@ const data = [
 ] as const;
 
 export async function addQuickTimeChangeTDV() {
-  while (true) {
-    await sleep(100);
+  const tradingViewToolBtn = await whileFind({
+    find: getTradingViewRightToolBarBtn,
+    sleepFn: sleep,
+  });
 
-    const tradingViewToolBtn = getTradingViewRightToolBarBtn();
-    if (!tradingViewToolBtn || !tradingViewToolBtn.parentElement) continue;
+  const eleList = data.map((d) => {
+    const { value, label } = d;
 
-    const eleList = data.map((d) => {
-      const { value, label } = d;
-
-      const icon = document.createElement("div");
-      icon.textContent = label;
-      cssApply(icon, {
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-      });
-
-      return { ele: createCopyTradingViewRightToolBar(icon, value), ...d };
+    const icon = document.createElement("div");
+    icon.textContent = label;
+    cssApply(icon, {
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
     });
 
-    const regex = /\(UTC[+-]\d+\)/;
-    const currentTimeZoneSelected = getXPath('//*[@data-name="time-zone-menu"]')?.textContent?.match(regex)?.[0];
+    return { ele: createCopyTradingViewRightToolBar(icon, value), ...d };
+  });
 
-    if (!currentTimeZoneSelected) continue;
+  const regex = /\(UTC[+-]?\d*\)/;
 
-    eleList.forEach(({ ele, value }) => {
-      if (!ele) return;
+  const currentTimeZoneSelected = await whileFind({
+    find: () => getXPath('//*[@data-name="time-zone-menu"]')?.textContent?.match(regex)?.[0],
+    sleepFn: sleep,
+  });
 
-      if (value.includes(currentTimeZoneSelected)) {
+  eleList.forEach(({ ele, value }) => {
+    if (!ele) return;
+
+    if (value.includes(currentTimeZoneSelected)) {
+      tradingViewBtnHightLight(ele, true);
+    }
+
+    const clickHandler = async () => {
+      try {
+        const tdvTimeBtn = document.querySelector<HTMLButtonElement>('button[data-name="time-zone-menu"]');
+        if (!tdvTimeBtn) return;
+
+        tdvTimeBtn.click();
+
+        const timeEle = await whileFind({
+          find: () => {
+            const xPath = '//tr//span[contains(text(),"' + value + '")]';
+            const ele = getXPath(xPath);
+
+            return ele;
+          },
+          sleepFn: sleep,
+        });
+
+        timeEle.click();
+
         tradingViewBtnHightLight(ele, true);
-      }
 
-      const clickHandler = async () => {
-        try {
-          const tdvTimeBtn = document.querySelector<HTMLButtonElement>('button[data-name="time-zone-menu"]');
-          if (!tdvTimeBtn) return;
+        eleList.forEach(({ ele: ele1 }) => ele1 && ele1 !== ele && tradingViewBtnHightLight(ele1, false));
+      } catch (error) {}
+    };
 
-          tdvTimeBtn.click();
+    ele.addEventListener("click", clickHandler);
 
-          const timeEle = await whileFind({
-            find: () => {
-              const xPath = '//tr//span[contains(text(),"' + value + '")]';
-              const ele = getXPath(xPath);
-
-              return ele;
-            },
-            sleepFn: sleep,
-          });
-
-          timeEle.click();
-
-          tradingViewBtnHightLight(ele, true);
-
-          eleList.forEach(({ ele: ele1 }) => ele1 && ele1 !== ele && tradingViewBtnHightLight(ele1, false));
-        } catch (error) {}
-      };
-
-      ele.addEventListener("click", clickHandler);
-
-      tradingViewToolBtn.parentElement?.insertBefore(ele, tradingViewToolBtn);
-    });
-
-    break;
-  }
+    tradingViewToolBtn.parentElement?.insertBefore(ele, tradingViewToolBtn);
+  });
 }
