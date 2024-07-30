@@ -41,10 +41,14 @@ async function autoEST() {
         copyBtn.textContent = "Can't detect";
         return;
       }
-
+      isRunning = true;
       const value = [positionType, ...Object.values(est)].join("|");
       navigator.clipboard.writeText(value);
       copyBtn.textContent = "Copied";
+      setTimeout(() => {
+        getXPath('//button[@data-name="submit-button"]')?.click();
+        isRunning = false;
+      }, 500);
     };
     copyBtn.addEventListener("click", clickHandle);
   } catch (error) {
