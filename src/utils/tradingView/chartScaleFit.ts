@@ -45,7 +45,6 @@ export async function chartScaleFit() {
       chart.dispatchEvent(event);
       await sleep(delay);
       const reset = getXPath('//tr[@data-role="menuitem" and .//span[text()="Alt + R"]]');
-      console.log(`~🤖 chartScaleFit 🤖~ `, { chartXpath, chart, reset, event });
       if (reset) {
         reset.click();
         await sleep(delay);

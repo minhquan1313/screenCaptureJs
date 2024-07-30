@@ -1,23 +1,16 @@
-import { getXPath } from "@/utils/getXPath";
-import { sleep } from "@/utils/sleep";
-import { whileFind } from "@/utils/whileFind";
+import { detectBuySell, getEST } from "@/addon/addAutoEST";
 
 async function main() {
-  const regex = /\(UTC[+-]?\d*\)/;
+  const clickHandle = () => {
+    const est = getEST();
+    if (!est) return;
+    const positionType = detectBuySell(est);
+    if (!positionType) return;
 
-  const currentTimeZoneSelected = await whileFind({
-    find: () => {
-      const t = getXPath('//*[@data-name="time-zone-menu"]')?.textContent;
+    const value = [positionType, ...Object.values(est)].join("|");
+  };
 
-      console.log(`~🤖 index2 🤖~ `, { t });
-
-      const value = t?.match(regex)?.[0];
-      console.log("🚀 ~ main ~ value:", value);
-
-      return value;
-    },
-    sleepFn: sleep,
-  });
+  clickHandle();
 }
 
 main();
