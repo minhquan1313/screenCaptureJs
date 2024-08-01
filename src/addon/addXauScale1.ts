@@ -4,14 +4,14 @@ import { getXPath } from "@/utils/getXPath";
 import { sleep } from "@/utils/sleep";
 import { textToDom } from "@/utils/textToDom";
 import { chartScaleFit } from "@/utils/tradingView/chartScaleFit";
-import { chartScaleFix, getCurrentSelectedSym } from "@/utils/tradingView/chartScaleFix";
+import { chartScaleFix, getCurrentSelectedSym, TValueHint } from "@/utils/tradingView/chartScaleFix";
 import { createCopyTradingViewRightToolBar } from "@/utils/tradingView/createCopyTradingViewRightToolBar";
 import { getTradingViewRightToolBarBtn } from "@/utils/tradingView/getTradingViewRightToolBarBtn";
 import { isChartLoading } from "@/utils/tradingView/isChartLoading";
 import { tradingViewBtnHightLight } from "@/utils/tradingView/tradingViewBtnHightLight";
 import { whileFind } from "@/utils/whileFind";
 
-const valueHint = {
+const valueHint: TValueHint = importValueHint() || {
   XAUUSD: 1.0,
   GC1: 1.0,
   USDWTI: 0.05,
@@ -87,7 +87,7 @@ export async function addXauScale1() {
 
     if (!symbol) return;
 
-    await chartScaleFix({ valueHint });
+    await chartScaleFix({ valueHint, onUpdate: updateValueHint });
   };
 
   newBtn.addEventListener("click", async () => {
@@ -104,7 +104,7 @@ export async function addXauScale1() {
 
       // await chartScaleFit();
 
-      await chartScaleFix({ valueHint, settingOfFocusedChart: true });
+      await chartScaleFix({ valueHint, settingOfFocusedChart: true, onUpdate: updateValueHint });
     } catch (error) {}
     tradingViewBtnHightLight(newBtn, false);
   });
@@ -115,4 +115,34 @@ export async function addXauScale1() {
   });
 
   window.addEventListener("click", fitHandle);
+
+  exportValueHint();
+}
+
+function importValueHint(): TValueHint | undefined {
+  const json = localStorage.getItem("mtb.tdv.valueHint");
+
+  if (!json) return undefined;
+
+  const obj = JSON.parse(json);
+
+  if (typeof obj !== "object" || typeof obj === null) return undefined;
+
+  if (Object.keys(obj).length === 0) return {};
+
+  for (const key in obj) {
+    const value = obj[key];
+    if (typeof value !== "number") return {};
+  }
+
+  return obj;
+}
+
+function updateValueHint(sym: string, value: number) {
+  valueHint[sym] = value;
+  exportValueHint();
+}
+
+function exportValueHint() {
+  localStorage.setItem("mtb.tdv.valueHint", JSON.stringify(valueHint));
 }

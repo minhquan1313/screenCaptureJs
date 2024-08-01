@@ -1,23 +1,27 @@
 import { cssApply } from "@/utils/cssApply";
 import { getXPath } from "@/utils/getXPath";
 import { sleep } from "@/utils/sleep";
+import { textToDom } from "@/utils/textToDom";
 import { triggerMouseDownUp } from "@/utils/triggerMouseDownUp";
 import { whileFind } from "@/utils/whileFind";
 
-interface IParams {
-  valueHint?: {
-    [symbol: string]: number;
-  };
+export type TValueHint = {
+  [symbol: string]: number;
+};
+
+interface IChartScaleFixParams {
+  valueHint?: TValueHint;
   settingOfFocusedChart?: boolean;
+  onUpdate?: (sym: string, value: number) => void;
 }
 const focusedChartXpath =
   '//div[contains(@class,"chart-container") and contains(@class,"active") and not(contains(@class,"inactive"))]//div[@class="chart-markup-table" and .//div[contains(@class,"legendMainSourceWrapper")]]';
 const anyChartXpath = '//div[@class="chart-markup-table" and .//div[contains(@class,"legendMainSourceWrapper")]]';
-
-export function chartScaleFix(param: IParams = {}) {
+let isFakeInputFocus = false;
+export function chartScaleFix(param: IChartScaleFixParams = {}) {
   return new Promise<void>(async (rs) => {
     try {
-      const { valueHint, settingOfFocusedChart = false } = param;
+      const { valueHint, settingOfFocusedChart = false, onUpdate } = param;
 
       // ('//div[@class="chart-markup-table" and .//div[contains(@class,"legendMainSourceWrapper")]]/div[last()]/div[last()]/div');
 
@@ -70,21 +74,6 @@ export function chartScaleFix(param: IParams = {}) {
 
       input.focus();
 
-      // input.value = "" + 1.1;
-      // input.dispatchEvent(new Event("change"));
-      // await sleep(100);
-      // input.value = "" + 1.1;
-      // input.dispatchEvent(new Event("input", { bubbles: true }));
-      // await sleep(100);
-      // input.blur();
-      // return;
-      // input.value = "" + 1.1;
-      // input.dispatchEvent(new Event("keydown", { bubbles: true }));
-      // input.value = "" + 1.1;
-      // input.dispatchEvent(new Event("keyup", { bubbles: true }));
-      // input.value = "" + 1.1;
-      // input.dispatchEvent(new Event("keypress", { bubbles: true }));
-
       const currentSelectedSymbol = getCurrentSelectedSym();
       let supported = false;
       if (valueHint && currentSelectedSymbol) {
@@ -93,7 +82,7 @@ export function chartScaleFix(param: IParams = {}) {
 
           const value = valueHint[symName];
 
-          appendValueHint(value);
+          appendValueHint(value, symName, onUpdate);
 
           input.value = "" + value.toFixed(5);
           supported = true;
@@ -106,7 +95,7 @@ export function chartScaleFix(param: IParams = {}) {
 
         input.removeEventListener("input", inpHandler);
         window.removeEventListener("click", clickHandle);
-        input.removeEventListener("blur", inpHandler);
+        // input.removeEventListener("blur", inpHandler);
 
         rs();
       }
@@ -120,30 +109,20 @@ export function chartScaleFix(param: IParams = {}) {
         getXPath(xpath)?.click();
 
         input.removeEventListener("input", inpHandler);
-        input.removeEventListener("blur", inpHandler);
+        // input.removeEventListener("blur", inpHandler);
         window.removeEventListener("click", clickHandle);
 
         rs();
       }
-      if (supported) {
-        input.addEventListener("input", inpHandler);
+
+      if (!supported && currentSelectedSymbol) {
+        appendValueHint(undefined, currentSelectedSymbol, onUpdate);
       }
-      input.addEventListener("blur", inpHandler);
+      input.addEventListener("input", inpHandler);
+      // }
+      // input.addEventListener("blur", inpHandler);
 
       window.addEventListener("click", clickHandle);
-
-      // async function blurHandler() {
-      //   await sleep(100);
-
-      //   xpath = '//button[@data-name="submit-button"]';
-      //   getXPath(xpath)?.click();
-
-      //   input.removeEventListener("blur", blurHandler);
-
-      //   rs();
-      // }
-
-      // input.addEventListener("blur", blurHandler);
     } catch (error) {
       console.log("Error xau scale", error);
     }
@@ -164,15 +143,6 @@ export function getCurrentSelectedSym() {
 }
 
 export function checkSymbolName(selectedSymbol: string, symbolName: string, contain = false) {
-  // const xpath =
-  //   '//div[@class="widgetbar-widgetbody"]/div[contains(@class,"watchlist")]//div[contains(@class,"listContainer")]/div/div[.//div[contains(@class,"active")]]';
-
-  // const currentSelectedSymbol = getXPath(xpath);
-  // if (!currentSelectedSymbol) return false;
-
-  // const nameEle = getXPath('.//span[contains(@class,"symbolNameText")]', selectedSymbol);
-  // if (!nameEle) return false;
-
   const name = selectedSymbol;
 
   if (contain) {
@@ -182,7 +152,7 @@ export function checkSymbolName(selectedSymbol: string, symbolName: string, cont
   return name === symbolName;
 }
 
-export function checkSymbolNameFromHint(hint: IParams["valueHint"], selectedSymbol: string, contain = false) {
+export function checkSymbolNameFromHint(hint: IChartScaleFixParams["valueHint"], selectedSymbol: string, contain = false) {
   for (const symName in hint) {
     if (checkSymbolName(selectedSymbol, symName, contain)) {
       return true;
@@ -192,18 +162,48 @@ export function checkSymbolNameFromHint(hint: IParams["valueHint"], selectedSymb
   return false;
 }
 
-function appendValueHint(value: number) {
+function appendValueHint(value: number | undefined, symbol: string, onUpdate: IChartScaleFixParams["onUpdate"]) {
+  "wrap-Q2NZ0gvI wrap-nGXZ4vJz breakpointNormal-nGXZ4vJz";
+
   const xpath = '(//div[@data-section-name="lockScale"][last()]//div[contains(@class,"wrap")])[1]';
   const inputWrapper = getXPath(xpath);
 
   if (!inputWrapper) return;
+  const addonSpanWithInput = makeCopyInput(value);
 
-  const div = cssApply(document.createElement("div"), {
-    padding: "0 8px",
-  });
+  if (addonSpanWithInput) {
+    inputWrapper.appendChild(addonSpanWithInput);
+    const inp = addonSpanWithInput.querySelector("input")!;
 
-  inputWrapper.appendChild(div);
-  // navigator.clipboard.writeText(String(value));
-  div.textContent = "Gõ: " + 1;
-  // div.textContent = "Đã copy: " + value;
+    if (!onUpdate) return;
+    inp.addEventListener("input", () => {
+      const { value } = inp;
+      const v = parseFloat(value);
+
+      if (!Number.isNaN(v) && v) {
+        onUpdate(symbol, v);
+      }
+    });
+    inp.addEventListener("focus", () => {
+      inp.select();
+    });
+  } else {
+    const div = cssApply(document.createElement("div"), {
+      padding: "0 8px",
+    });
+    inputWrapper.appendChild(div);
+    // navigator.clipboard.writeText(String(value));
+    div.textContent = "D: " + value;
+  }
+}
+
+function makeCopyInput(value?: number) {
+  const spanHasInput = getXPath(
+    '//div[contains(@class,"dialog")]//div[contains(@class,"content")]//span[contains(@class,"container")][.//input[@inputmode="numeric"]]',
+  );
+  if (!spanHasInput) return undefined;
+
+  const spanCopy = textToDom(spanHasInput.outerHTML);
+  spanCopy.querySelector("input")!.value = "Mặc định: " + (value ? value : "chưa có");
+  return spanCopy;
 }
