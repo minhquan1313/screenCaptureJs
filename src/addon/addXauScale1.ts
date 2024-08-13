@@ -1,5 +1,4 @@
 import svg from "@/assets/svg/expand.svg";
-import svgScale from "@/assets/svg/scale.svg";
 import { focusedChartXpath } from "@/constants/tdv";
 import { getXPath } from "@/utils/getXPath";
 import { sleep } from "@/utils/sleep";
@@ -24,7 +23,7 @@ const valueHint: TValueHint = importValueHint() || {
 let allowAuto = true;
 
 export async function addXauScale1() {
-  const iconEle = textToDom(svgScale);
+  // const iconEle = textToDom(svgScale);
   const iconEleAuto = textToDom(svg);
 
   const tradingViewToolBtn = await whileFind({
@@ -32,14 +31,14 @@ export async function addXauScale1() {
     sleepFn: sleep,
   });
 
-  const newBtn = await whileFind({
-    find: () =>
-      createCopyTradingViewRightToolBar(iconEle, "Khoá thu phóng", {
-        height: "26px",
-        width: "26px",
-      }),
-    sleepFn: sleep,
-  });
+  // const newBtn = await whileFind({
+  //   find: () =>
+  //     createCopyTradingViewRightToolBar(iconEle, "Khoá thu phóng", {
+  //       height: "26px",
+  //       width: "26px",
+  //     }),
+  //   sleepFn: sleep,
+  // });
   const newBtnAuto = await whileFind({
     find: () =>
       createCopyTradingViewRightToolBar(iconEleAuto, "Khoá thu phóng tự động", {
@@ -50,7 +49,7 @@ export async function addXauScale1() {
   });
 
   tradingViewBtnHightLight(newBtnAuto, allowAuto);
-  tradingViewToolBtn.parentElement?.insertBefore(newBtn, tradingViewToolBtn);
+  // tradingViewToolBtn.parentElement?.insertBefore(newBtn, tradingViewToolBtn);
   tradingViewToolBtn.parentElement?.insertBefore(newBtnAuto, tradingViewToolBtn);
 
   const fitHandle = async (e: MouseEvent) => {
@@ -93,24 +92,24 @@ export async function addXauScale1() {
     await chartScaleFix({ valueHint, onUpdate: updateValueHint, selectedChart: selectedChart });
   };
 
-  newBtn.addEventListener("click", async () => {
-    try {
-      tradingViewBtnHightLight(newBtn, true);
+  // newBtn.addEventListener("click", async () => {
+  //   try {
+  //     tradingViewBtnHightLight(newBtn, true);
 
-      await whileFind({
-        find: function () {
-          return !isChartLoading();
-        },
-        sleepFn: sleep,
-        delay: 50,
-      });
+  //     await whileFind({
+  //       find: function () {
+  //         return !isChartLoading();
+  //       },
+  //       sleepFn: sleep,
+  //       delay: 50,
+  //     });
 
-      // await chartScaleFit();
+  //     // await chartScaleFit();
 
-      await chartScaleFix({ valueHint, settingOfFocusedChart: true, onUpdate: updateValueHint });
-    } catch (error) {}
-    tradingViewBtnHightLight(newBtn, false);
-  });
+  //     await chartScaleFix({ valueHint, settingOfFocusedChart: true, onUpdate: updateValueHint });
+  //   } catch (error) {}
+  //   tradingViewBtnHightLight(newBtn, false);
+  // });
 
   newBtnAuto.addEventListener("click", async () => {
     allowAuto = !allowAuto;
