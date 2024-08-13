@@ -3,7 +3,7 @@ import { sleep } from "@/utils/sleep";
 import { getAutoFitScreenBtn, isAutoFitSScreen } from "@/utils/tradingView/isAutoFitScreen";
 import { whileFind } from "@/utils/whileFind";
 
-const delay = 50;
+const delay = 25;
 
 interface IParams {
   //
