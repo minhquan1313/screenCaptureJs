@@ -1,5 +1,6 @@
 import svg from "@/assets/svg/expand.svg";
 import svgScale from "@/assets/svg/scale.svg";
+import { focusedChartXpath } from "@/constants/tdv";
 import { getXPath } from "@/utils/getXPath";
 import { sleep } from "@/utils/sleep";
 import { textToDom } from "@/utils/textToDom";
@@ -79,6 +80,8 @@ export async function addXauScale1() {
 
     if (!symbol) return;
 
+    const selectedChart = getXPath(focusedChartXpath);
+
     // Start process
 
     await chartScaleFit();
@@ -87,7 +90,7 @@ export async function addXauScale1() {
 
     if (!symbol) return;
 
-    await chartScaleFix({ valueHint, onUpdate: updateValueHint });
+    await chartScaleFix({ valueHint, onUpdate: updateValueHint, selectedChart: selectedChart });
   };
 
   newBtn.addEventListener("click", async () => {

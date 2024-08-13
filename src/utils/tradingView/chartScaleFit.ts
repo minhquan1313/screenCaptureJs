@@ -59,7 +59,11 @@ export async function chartScaleFit() {
     index++;
   }
 
-  autoFitScreenBtnList[0]?.click();
+  for await (const btn of autoFitScreenBtnList) {
+    btn.click();
+  }
+
+  // autoFitScreenBtnList[0]?.click();
   await sleep(delay);
 
   hideAllArrow.click();

@@ -1,3 +1,4 @@
+import { anyChartXpath, focusedChartXpath } from "@/constants/tdv";
 import { cssApply } from "@/utils/cssApply";
 import { getXPath } from "@/utils/getXPath";
 import { sleep } from "@/utils/sleep";
@@ -13,15 +14,13 @@ interface IChartScaleFixParams {
   valueHint?: TValueHint;
   settingOfFocusedChart?: boolean;
   onUpdate?: (sym: string, value: number) => void;
+  selectedChart?: HTMLElement | null;
 }
-const focusedChartXpath =
-  '//div[contains(@class,"chart-container") and contains(@class,"active") and not(contains(@class,"inactive"))]//div[@class="chart-markup-table" and .//div[contains(@class,"legendMainSourceWrapper")]]';
-const anyChartXpath = '//div[@class="chart-markup-table" and .//div[contains(@class,"legendMainSourceWrapper")]]';
 let isFakeInputFocus = false;
 export function chartScaleFix(param: IChartScaleFixParams = {}) {
   return new Promise<void>(async (rs) => {
     try {
-      const { valueHint, settingOfFocusedChart = false, onUpdate } = param;
+      const { valueHint, settingOfFocusedChart = false, onUpdate, selectedChart } = param;
 
       // ('//div[@class="chart-markup-table" and .//div[contains(@class,"legendMainSourceWrapper")]]/div[last()]/div[last()]/div');
 
@@ -30,8 +29,10 @@ export function chartScaleFix(param: IChartScaleFixParams = {}) {
       // );
 
       // for await (const settingEleToTrigger of settingEleToTriggerList) {
-      let xpath = (settingOfFocusedChart ? focusedChartXpath : anyChartXpath) + "/div[last()]/div[last()]/div";
-      const settingEleToTrigger = getXPath(xpath);
+      const xpathSettingChild = "/div[last()]/div[last()]/div";
+      let xpath = (settingOfFocusedChart ? focusedChartXpath : anyChartXpath) + xpathSettingChild;
+      const settingEleToTrigger = selectedChart ? getXPath("." + xpathSettingChild, selectedChart) : getXPath(xpath);
+      console.log(`~🤖 chartScaleFix 🤖~ `, { xpathSettingChild, xpath, settingEleToTrigger, selectedChart });
 
       if (!settingEleToTrigger) return;
 
