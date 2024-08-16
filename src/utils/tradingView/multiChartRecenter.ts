@@ -4,6 +4,7 @@ import { getAutoFitScreenBtn, isAutoFitSScreen } from "@/utils/tradingView/isAut
 import { whileFind } from "@/utils/whileFind";
 
 const delay = 25;
+// const delay = 500;
 
 interface IParams {
   //
@@ -43,6 +44,8 @@ export async function multiChartRecenter(value: IParams = {}) {
    * Reset charts click
    */
   for await (const btn of autoFitScreenBtnList) {
+    console.log(`~🤖 multiChartRecenter 🤖~ `, { auto: isAutoFitSScreen(btn), btn });
+
     if (isAutoFitSScreen(btn)) continue;
 
     if (selectedChart && !selectedChart.contains(btn)) {
@@ -79,4 +82,6 @@ export async function multiChartRecenter(value: IParams = {}) {
     sleepFn: sleep,
   });
   hideAll.click();
+
+  selectedChart?.click();
 }

@@ -16,7 +16,6 @@ interface IChartScaleFixParams {
   onUpdate?: (sym: string, value: number) => void;
   selectedChart?: HTMLElement | null;
 }
-let isFakeInputFocus = false;
 export function chartScaleFix(param: IChartScaleFixParams = {}) {
   return new Promise<void>(async (rs) => {
     try {
