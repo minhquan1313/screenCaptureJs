@@ -20,6 +20,8 @@ export function createCopyTradingViewRightToolBar(icon: HTMLElement, name: strin
   btnCopy.setAttribute("data-name", name);
   btnCopy.setAttribute("data-tooltip", name);
   const spanSvgWrapper = btnCopy.querySelector("span");
+  console.log("🚀 ~ createCopyTradingViewRightToolBar ~ spanSvgWrapper:", spanSvgWrapper);
+
   if (!spanSvgWrapper) return;
 
   spanSvgWrapper.innerHTML = "";

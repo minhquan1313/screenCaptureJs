@@ -5,7 +5,7 @@ await esbuild.build({
   outdir: "dist",
 
   platform: "browser",
-  format: "iife",
+  format: "esm",
 
   loader: {
     ".svg": "text",
